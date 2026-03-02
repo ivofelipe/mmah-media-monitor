@@ -93,3 +93,90 @@ outlets:
     region: Ontario
     rss: https://www.tvo.org/feeds/politics
     tags: [housing, municipal]
+
+    # --- CBC (Ontario regions) ---
+- name: CBC Toronto
+  region: GTA
+  tags: [cbc, local]
+  rss: https://rss.cbc.ca/lineup/canada-toronto.xml
+  rss_alt: https://www.cbc.ca/m/rss/canada-toronto.xml
+
+- name: CBC Hamilton
+  region: Hamilton
+  tags: [cbc, local]
+  rss: https://rss.cbc.ca/lineup/canada-hamiltonnews.xml
+  rss_alt: https://www.cbc.ca/m/rss/canada-hamilton.xml
+
+- name: CBC Kitchener-Waterloo
+  region: Kitchener-Waterloo
+  tags: [cbc, local]
+  rss: https://rss.cbc.ca/lineup/canada-kitchenerwaterloo.xml
+  rss_alt: https://www.cbc.ca/m/rss/canada-kitchenerwaterloo.xml
+
+- name: CBC London
+  region: London
+  tags: [cbc, local]
+  rss: https://rss.cbc.ca/lineup/canada-london.xml
+  rss_alt: https://www.cbc.ca/m/rss/canada-london.xml
+
+- name: CBC Windsor
+  region: Windsor
+  tags: [cbc, local]
+  rss: https://rss.cbc.ca/lineup/canada-windsor.xml
+  rss_alt: https://www.cbc.ca/m/rss/canada-windsor.xml
+
+  # --- Postmedia (Ontario locals + national) ---
+- name: London Free Press (Local)
+  region: London
+  tags: [postmedia, local]
+  rss: https://lfpress.com/category/news/local-news/feed.xml
+
+- name: Ottawa Citizen (News)
+  region: Ottawa
+  tags: [postmedia, local]
+  rss: https://ottawacitizen.com/category/news/feed.xml
+
+- name: Ottawa Sun (Local)
+  region: Ottawa
+  tags: [postmedia, local]
+  rss: https://ottawasun.com/category/news/local-news/feed.xml
+
+- name: Toronto Sun (Local)
+  region: GTA
+  tags: [postmedia, local]
+  rss: https://torontosun.com/category/news/local-news/feed.xml
+
+- name: Windsor Star (Local)
+  region: Windsor-Essex
+  tags: [postmedia, local]
+  rss: https://www.windsorstar.com/category/news/local-news/feed.xml
+
+- name: Sudbury Star (Local)
+  region: Sudbury
+  tags: [postmedia, local]
+  rss: https://www.thesudburystar.com/category/news/local-news/feed.xml
+
+- name: Sault Star (News)
+  region: Sault Ste. Marie
+  tags: [postmedia, local]
+  rss: https://www.saultstar.com/category/news/feed.xml
+
+- name: North Bay Nugget (Local)
+  region: North Bay
+  tags: [postmedia, local]
+  rss: https://www.nugget.ca/category/news/local-news/feed.xml
+
+- name: Kingston Whig-Standard (News)
+  region: Kingston
+  tags: [postmedia, local]
+  rss: https://www.thewhig.com/category/news/feed.xml
+
+- name: Belleville Intelligencer (Local)
+  region: Belleville/Quinte
+  tags: [postmedia, local]
+  rss: https://www.intelligencer.ca/category/news/local-news/feed.xml
+
+- name: National Post (Canada)
+  region: National
+  tags: [postmedia, national]
+  rss: https://nationalpost.com/category/news/feed.xml
