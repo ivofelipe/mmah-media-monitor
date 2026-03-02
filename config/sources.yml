@@ -1,34 +1,80 @@
 outlets:
-  # --- CBC (more reliable endpoints; mobile feed as fallback) ---
+  # --- CBC (Ontario regions; lineup primary + mobile fallback) ---
   - name: CBC Toronto
     region: GTA
     tags: [cbc, local]
-    rss: https://rss.cbc.ca/lineup/canada-toronto.xml
-    rss_alt: https://www.cbc.ca/m/rss/canada-toronto.xml
+    rss: http://rss.cbc.ca/lineup/canada-toronto.xml
+    rss_alt: http://www.cbc.ca/m/rss/canada-toronto.xml
 
   - name: CBC Hamilton
     region: Hamilton
     tags: [cbc, local]
-    rss: https://rss.cbc.ca/lineup/canada-hamiltonnews.xml
-    rss_alt: https://www.cbc.ca/m/rss/canada-hamilton.xml
+    rss: http://rss.cbc.ca/lineup/canada-hamiltonnews.xml
+    rss_alt: http://www.cbc.ca/m/rss/canada-hamilton.xml
 
   - name: CBC Kitchener-Waterloo
     region: Kitchener-Waterloo
     tags: [cbc, local]
-    rss: https://rss.cbc.ca/lineup/canada-kitchenerwaterloo.xml
-    rss_alt: https://www.cbc.ca/m/rss/canada-kitchenerwaterloo.xml
+    rss: http://rss.cbc.ca/lineup/canada-kitchenerwaterloo.xml
+    rss_alt: http://www.cbc.ca/m/rss/canada-kitchenerwaterloo.xml
 
   - name: CBC London
     region: London
     tags: [cbc, local]
-    rss: https://rss.cbc.ca/lineup/canada-london.xml
-    rss_alt: https://www.cbc.ca/m/rss/canada-london.xml
+    rss: http://rss.cbc.ca/lineup/canada-london.xml
+    rss_alt: http://www.cbc.ca/m/rss/canada-london.xml
 
   - name: CBC Windsor
-    region: Windsor
+    region: Windsor-Essex
     tags: [cbc, local]
-    rss: https://rss.cbc.ca/lineup/canada-windsor.xml
-    rss_alt: https://www.cbc.ca/m/rss/canada-windsor.xml
+    rss: http://rss.cbc.ca/lineup/canada-windsor.xml
+    rss_alt: http://www.cbc.ca/m/rss/canada-windsor.xml
+
+  - name: CBC Ottawa
+    region: Ottawa
+    tags: [cbc, local]
+    rss: http://rss.cbc.ca/lineup/canada-ottawa.xml
+    rss_alt: http://www.cbc.ca/m/rss/canada-ottawa.xml
+
+  # --- CityNews (GTA municipal & breaking) ---
+  - name: CityNews Toronto
+    region: GTA
+    tags: [citynews, local]
+    rss: https://toronto.citynews.ca/feed/
+
+  # --- CP24 (GTA transport, policing, municipal impacts) ---
+  - name: CP24 Top Stories (Full Text)
+    region: GTA
+    tags: [cp24, local]
+    rss: https://www.cp24.com/rss/cp24-top-stories-full-text-rss-feed-1.5859135
+
+  # --- Global News (Ontario & Canada context) ---
+  - name: Global News (Politics)
+    region: Ontario
+    tags: [global, provincial]
+    rss: https://globalnews.ca/politics/feed/
+  - name: Global News (National)
+    region: Canada
+    tags: [global, national]
+    rss: https://globalnews.ca/national/feed/
+
+  # --- Toronto Star (sitewide news via search RSS) ---
+  - name: Toronto Star (News - search)
+    region: GTA
+    tags: [torstar, local]
+    rss: https://www.thestar.com/search/?f=rss&t=article&c=news*
+
+  # --- Niagara Now (Niagara governance & planning) ---
+  - name: Niagara Now (News)
+    region: Niagara
+    tags: [niagara, local]
+    rss: https://niagaranow.com/feed/
+
+  # --- Village Media (Simcoe/Midland area) ---
+  - name: MidlandToday (Site feed)
+    region: Simcoe County
+    tags: [village-media, local]
+    rss: https://www.midlandtoday.ca/rss
 
   # --- Postmedia (Ontario locals + national) ---
   - name: London Free Press (Local)
@@ -85,9 +131,3 @@ outlets:
     region: National
     tags: [postmedia, national]
     rss: https://nationalpost.com/category/news/feed.xml
-
-  # --- Torstar proxy (sitewide news via search RSS) ---
-  - name: Toronto Star (News - sitewide via search)
-    region: GTA
-    tags: [torstar, local]
-    rss: https://www.thestar.com/search/?f=rss&t=article&c=news*
