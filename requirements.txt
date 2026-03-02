@@ -5,3 +5,4 @@ jinja2
 nltk
 rapidfuzz
 beautifulsoup4
+PyYAML>=6.0
