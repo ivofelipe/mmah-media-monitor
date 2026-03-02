@@ -23,16 +23,21 @@ from utils import (
     normalize_text,
 )
 
-# -------- Network safety --------
-socket.setdefaulttimeout(12)          # last-resort timeout for any blocking call
-HTTP_TIMEOUT = 12                     # seconds per HTTP request
-UA = {"User-Agent": "MMAH-Monitor/1.0 (+github-actions)"}
+# -------- Network safety & settings --------
+# A few feeds (notably some CBC endpoints) can be slow in CI. We apply:
+# - socket default timeout as a backstop
+# - split connect/read timeouts (6s connect, 24s read)
+# - more retries + backoff
+# - a LAST-RESORT mirror fetch (read-only) via r.jina.ai/http://<original>
+socket.setdefaulttimeout(24)
+HTTP_TIMEOUT = (6, 24)  # (connect, read) seconds
+UA = {"User-Agent": "MMAH-Monitor/1.1 (+github-actions)"}
 
 def get_session():
     """Create a requests session with retries/backoff for robustness."""
     retries = Retry(
-        total=2,                      # quick retries
-        backoff_factor=0.75,          # 0.75s, then 1.5s
+        total=4,
+        backoff_factor=1.25,     # ~1.25s, 2.5s, 3.75s, 5s
         status_forcelist=[429, 500, 502, 503, 504],
         allowed_methods=["GET"],
         raise_on_status=False,
@@ -60,9 +65,7 @@ def clean_html(html: str) -> str:
     return BeautifulSoup(html, "html.parser").get_text(" ").strip()
 
 def article_to_record(outlet: dict, entry) -> dict:
-    """
-    Convert a feedparser entry to our normalized record.
-    """
+    """Convert a feedparser entry to our normalized record."""
     title = (entry.get("title") or "").strip()
     link = entry.get("link")
     summary = clean_html(entry.get("summary") or entry.get("description") or "")
@@ -73,7 +76,7 @@ def article_to_record(outlet: dict, entry) -> dict:
         if not dt or isinstance(dt, str):
             raise ValueError("unparsed")
         # If feed returns naive time, localize to Toronto
-        if not dt.tzinfo:
+        if not getattr(dt, "tzinfo", None):
             from pytz import timezone
             dt = timezone("America/Toronto").localize(dt)
     except Exception:
@@ -100,26 +103,28 @@ def in_time_window(rec: dict, start_dt) -> bool:
 
 def matches_keywords(rec: dict, kw: dict):
     """
-    Simple keyword inclusion/exclusion on lowercase normalized text.
-    Returns (bool, categories_list).
+    Flexible keyword inclusion/exclusion across multiple categories.
+    Returns (bool, matched_categories_list).
     """
+    categories = kw.get("categories", {})
+    if not categories:
+        return False, []
+
     text_norm = normalize_text(f"{rec['title']} {rec['summary']}")
 
-    def includes_any(words): return any(w.lower() in text_norm for w in words)
-    def excludes_any(words): return any(w.lower() in text_norm for w in words)
+    matched = []
+    for cat_name, cat_cfg in categories.items():
+        inc = [w.lower() for w in cat_cfg.get("include", [])]
+        exc = [w.lower() for w in cat_cfg.get("exclude", [])]
 
-    cats = []
-    housing_cfg = kw["categories"]["housing"]
-    municipal_cfg = kw["categories"]["municipal"]
+        if inc and any(w in text_norm for w in inc):
+            if not any(w in text_norm for w in exc):
+                matched.append(cat_name)
 
-    if includes_any(housing_cfg["include"]) and not excludes_any(housing_cfg.get("exclude", [])):
-        cats.append("Housing")
-    if includes_any(municipal_cfg["include"]) and not excludes_any(municipal_cfg.get("exclude", [])):
-        cats.append("Municipal Affairs")
-
-    if not cats:
+    if not matched:
         return False, []
-    return True, list(set(cats))  # dedupe categories
+    # Deduplicate and return
+    return True, sorted(set(matched))
 
 def deduplicate(records: list) -> list:
     """Remove near-duplicate headlines across outlets."""
@@ -136,9 +141,10 @@ def fetch_feed_bytes(session: requests.Session, url: str) -> bytes:
 
 # -------- Main --------
 def main():
-    # Widened to last 24 hours per request
-    start_dt = window_start(24)
-    sources = load_yaml(CONFIG_SOURCES)["outlets"]
+    # Collector window: widened to last 24 hours (default now lives in utils.py)
+    start_dt = window_start()
+    sources_root = load_yaml(CONFIG_SOURCES)
+    sources = sources_root.get("outlets", []) if isinstance(sources_root, dict) else sources_root
     keywords = load_yaml(CONFIG_KEYWORDS)
 
     collected = []
@@ -162,8 +168,17 @@ def main():
                     print(f"[WARN] Primary failed, trying alt | {alt}", flush=True)
                     content = fetch_feed_bytes(session, alt)
                 except Exception as e2:
-                    print(f"[WARN] Failed {outlet['name']}: {e1} | alt failed: {e2}", flush=True)
-                    continue
+                    # LAST-RESORT: mirror via r.jina.ai/http://<original>
+                    try:
+                        if primary.startswith("http"):
+                            mirror = f"https://r.jina.ai/{primary.replace('https://', 'http://')}"
+                            print(f"[WARN] Alt failed, trying mirror | {mirror}", flush=True)
+                            content = fetch_feed_bytes(session, mirror)
+                        else:
+                            raise e2
+                    except Exception as e3:
+                        print(f"[WARN] Failed {outlet['name']}: {e1} | alt failed: {e2} | mirror failed: {e3}", flush=True)
+                        continue
             else:
                 print(f"[WARN] Failed {outlet['name']}: {e1}", flush=True)
                 continue
@@ -194,3 +209,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+``
