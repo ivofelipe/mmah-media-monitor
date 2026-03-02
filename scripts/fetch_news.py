@@ -88,7 +88,12 @@ def main():
     collected = []
     for outlet in sources:
         try:
-            feed = feedparser.parse(outlet["rss"])
+
+print(f"[INFO] Fetching {outlet['name']} | {outlet['rss']}", flush=True)
+resp = requests.get(outlet["rss"], timeout=HTTP_TIMEOUT, headers=UA)
+resp.raise_for_status()
+feed = feedparser.parse(resp.content)
+
             for entry in feed.entries:
                 rec = article_to_record(outlet, entry)
                 if not in_time_window(rec, start_dt):
