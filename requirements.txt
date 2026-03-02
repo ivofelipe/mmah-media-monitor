@@ -1,0 +1,7 @@
+feedparser
+pytz
+python-dateutil
+jinja2
+nltk
+rapidfuzz
+beautifulsoup4
