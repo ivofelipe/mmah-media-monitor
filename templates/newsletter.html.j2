@@ -1,0 +1,78 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MMAH Daily Media Monitor – {{ date_human }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.5; margin: 2rem; color: #111; }
+  header { display:flex; align-items:center; gap: 16px; margin-bottom: 1rem; }
+  header img { height: 32px; }
+  h1, h2 { margin-top: 1.2rem; }
+  .meta { color: #555; font-size: 0.9rem; }
+  .story { margin: 0 0 1rem 0; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; }
+  .outlet { font-weight: 600; color: #333; }
+  .tone { font-size: 0.9rem; color: #444; }
+  .chip { display:inline-block; padding: 2px 8px; border-radius: 999px; background: #eef; color: #225; font-size: 0.75rem; margin-left: 6px;}
+  .section { margin-top: 2rem; }
+  .summary { background: #f6f8fa; border: 1px solid #e4e7eb; padding: 1rem; border-radius: 8px; }
+  .footer { margin-top: 3rem; font-size: 0.9rem; color: #6b7280; }
+  a { color: #0a58ca; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <header>
+    <img src="../assets/ontario-wordmark.svg" alt="Ontario wordmark" />
+    <div>
+      <div class="meta">Ontario Ministry of Municipal Affairs and Housing</div>
+      <h1 style="margin: 0">MMAH Daily Media Monitor</h1>
+    </div>
+  </header>
+
+  <div class="meta">Generated: {{ generated }} · Window: last 16 hours · Timezone: America/Toronto</div>
+
+  <div class="summary">
+    <h2>Summary</h2>
+    <p>{{ top_summary }}</p>
+    <div class="tone"><strong>Overall media tone:</strong> {{ overall_tone }}</div>
+  </div>
+
+  <div class="section">
+    <h2>Housing</h2>
+    {% if housing|length == 0 %}
+      <p class="meta">No housing stories in the last 16 hours.</p>
+    {% else %}
+      {% for s in housing %}
+      <div class="story">
+        <div><span class="outlet">{{ s.outlet }}</span> <span class="chip">Housing</span></div>
+        <div><a href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ s.title }}</a></div>
+        {% if s.summary %}<div>{{ s.summary }}</div>{% endif %}
+        <div class="meta">Published: {{ s.published_human }} • Tone: {{ s.tone_label }}</div>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <h2>Municipal Affairs</h2>
+    {% if municipal|length == 0 %}
+      <p class="meta">No municipal affairs stories in the last 16 hours.</p>
+    {% else %}
+      {% for s in municipal %}
+      <div class="story">
+        <div><span class="outlet">{{ s.outlet }}</span> <span class="chip">Municipal</span></div>
+        <div><a href="{{ s.link }}" target="_blank" rel="noopener noreferrer">{{ s.title }}</a></div>
+        {% if s.summary %}<div>{{ s.summary }}</div>{% endif %}
+        <div class="meta">Published: {{ s.published_human }} • Tone: {{ s.tone_label }}</div>
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="footer">
+    <p>Internal use – Ontario MMAH media monitoring. This page links to external sources; copyright remains with their owners.</p>
+  </div>
+</body>
+</html>
