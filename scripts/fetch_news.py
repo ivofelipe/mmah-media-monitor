@@ -7,6 +7,11 @@ from pathlib import Path
 from datetime import datetime
 from utils import now_toronto, window_start, compute_id, near_duplicate, label_sentiment, normalize_text
 
+import socket, requests
+socket.setdefaulttimeout(12)         # safety net for any library call
+HTTP_TIMEOUT = 12                    # seconds
+UA = {"User-Agent": "MMAH-Monitor/1.0 (+github-actions)"}
+
 CONFIG_SOURCES = Path("config/sources.yml")
 CONFIG_KEYWORDS = Path("config/keywords.yml")
 DATA_DIR = Path("data")
