@@ -1,0 +1,95 @@
+
+outlets:
+  # CBC regional feeds (Ontario)
+  - name: CBC Toronto
+    region: GTA
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-toronto
+    tags: [housing, municipal]
+  - name: CBC Ottawa
+    region: Ottawa
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-ottawa
+    tags: [housing, municipal]
+  - name: CBC London
+    region: London
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-london
+    tags: [housing, municipal]
+  - name: CBC Windsor
+    region: Windsor
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-windsor
+    tags: [housing, municipal]
+  - name: CBC Kitchener-Waterloo
+    region: Waterloo
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-kitchenerwaterloo
+    tags: [housing, municipal]
+  - name: CBC Hamilton
+    region: Hamilton
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-hamiltonnews
+    tags: [housing, municipal]
+  - name: CBC Sudbury
+    region: Sudbury
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-sudbury
+    tags: [housing, municipal]
+  - name: CBC Thunder Bay
+    region: Thunder Bay
+    rss: https://www.cbc.ca/webfeed/rss/rss-canada-thunderbay
+    tags: [housing, municipal]
+
+  # Global News regional feeds (Ontario)
+  - name: Global News Toronto
+    region: GTA
+    rss: https://globalnews.ca/toronto/feed/
+    tags: [housing, municipal]
+  - name: Global News Ottawa
+    region: Ottawa
+    rss: https://globalnews.ca/ottawa/feed/
+    tags: [housing, municipal]
+  - name: Global News Kingston
+    region: Kingston
+    rss: https://globalnews.ca/kingston/feed/
+    tags: [housing, municipal]
+  - name: Global News Peterborough
+    region: Peterborough
+    rss: https://globalnews.ca/peterborough/feed/
+    tags: [housing, municipal]
+  - name: Global News London
+    region: London
+    rss: https://globalnews.ca/london/feed/
+    tags: [housing, municipal]
+  - name: Global News Guelph
+    region: Guelph
+    rss: https://globalnews.ca/guelph/feed/
+    tags: [housing, municipal]
+  - name: Global News Hamilton
+    region: Hamilton
+    rss: https://globalnews.ca/hamilton/feed/
+    tags: [housing, municipal]
+
+  # CityNews
+  - name: CityNews Toronto
+    region: GTA
+    rss: https://toronto.citynews.ca/feed/
+    tags: [housing, municipal]
+
+  # Postmedia (selected Ontario dailies)
+  - name: Ottawa Citizen
+    region: Ottawa
+    rss: https://ottawacitizen.com/category/news/feed.xml
+    tags: [housing, municipal]
+  - name: Toronto Sun
+    region: GTA
+    rss: https://torontosun.com/category/news/feed.xml
+    tags: [housing, municipal]
+  - name: Windsor Star
+    region: Windsor
+    rss: https://windsorstar.com/category/news/feed.xml
+    tags: [housing, municipal]
+  - name: Sudbury Star
+    region: Sudbury
+    rss: https://www.thesudburystar.com/category/news/local-news/feed.xml
+    tags: [housing, municipal]
+
+  # TVO current affairs (Ontario focus)
+  - name: TVO Today – Politics
+    region: Ontario
+    rss: https://www.tvo.org/feeds/politics
+    tags: [housing, municipal]
