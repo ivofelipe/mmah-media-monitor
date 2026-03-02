@@ -1,0 +1,53 @@
+name: Build MMAH Newsletter
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # hourly
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+env:
+  TZ: America/Toronto
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Determine local hour
+        id: hour
+        run: echo "HOUR=$(date +'%H')" >> $GITHUB_OUTPUT
+
+      - name: Exit unless 07:xx local time (skipped for manual run)
+        if: ${{ github.event_name != 'workflow_dispatch' && steps.hour.outputs.HOUR != '07' }}
+        run: |
+          echo "It is not 07:00 local. Exiting without publishing. Current hour: ${{ steps.hour.outputs.HOUR }}"
+          exit 0
+
+      - name: Fetch News
+        run: python scripts/fetch_news.py
+
+      - name: Build Newsletter
+        run: python scripts/build_newsletter.py
+
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs data || true
+          git commit -m "Auto: newsletter $(date -u +'%Y-%m-%d %H:%M UTC')" || echo "No changes to commit"
+          git push
