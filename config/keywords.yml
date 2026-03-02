@@ -1,66 +1,136 @@
-
 categories:
-  housing:
+  housing_supply:
     include:
-      - affordable housing
       - housing starts
-      - housing target
-      - non-profit housing
-      - supportive housing
-      - inclusionary zoning
-      - rent-geared-to-income
-      - homelessness
-      - shelter
-      - development charges
-      - CMHC
-      - residential construction
-      - purpose-built rental
-      - official plan amendment
-      - OLT decision
-      - municipal zoning
-      - as-of-right
-      - density
+      - building permits
       - gentle density
+      - fourplex
+      - triplex
+      - duplex
+      - ARU
+      - as-of-right
+      - HAF
+      - Housing Accelerator Fund
+      - rapid housing
+      - inclusionary zoning
       - missing middle
-      - laneway suites
-      - garden suites
-      - PPS
-      - provincial planning statement
-      - Bill 23
-      - Bill 109
-      - Planning Act
-      - Greenbelt
-      - urban boundary
-      - urban expansion
-    exclude:
-      - mortgage tips
-      - home decor
-      - real estate listings
-  municipal:
+      - modular housing
+      - prefab
+      - StatCan
+      - CMHC
+      - construction productivity
+    exclude: []
+
+  rental_tenant:
     include:
-      - municipal council
-      - city council
-      - regional council
-      - mayor
-      - strong mayor powers
-      - municipal finance
+      - rent strike
+      - above-guideline increase
+      - AGI
+      - Landlord and Tenant Board
+      - LTB
+      - rent control
+      - eviction
+      - renoviction
+      - N12
+      - N13
+      - MetCap
+    exclude: []
+
+  municipal_finance_fees:
+    include:
       - development charges
-      - municipal budget
-      - property tax
-      - OLT decision
-      - Planning Act
-      - official plan
+      - cash-in-lieu of parkland
+      - parkland dedication
+      - DC by-law
+      - community benefits charge
+      - CBC charge
+      - permit fees
+      - planning fees
+    exclude: []
+
+  municipal_governance:
+    include:
+      - amalgamation
+      - regional reform
+      - governance review
+      - strong mayor
+      - integrity commissioner
+      - code of conduct
+      - policing costs
+      - Community Safety and Policing Act
+      - CSPSA
+      - transparency
+      - metrics
+      - accountability
+    exclude: []
+
+  land_use_environment:
+    include:
+      - Official Plan
+      - OPA
       - zoning by-law
       - site plan
-      - upper-tier
-      - lower-tier
-      - regional governance
-      - growth management
-      - settlement area boundary
-      - infrastructure funding
-      - public consultation
-      - municipal elections
-    exclude:
-      - community events
-      - sports scores
-      - lifestyle
+      - moraine
+      - Oro Moraine
+      - Oak Ridges Moraine
+      - watershed
+      - natural heritage
+      - conservation authority
+    exclude: []
+
+  infrastructure_utilities:
+    include:
+      - water main
+      - wastewater
+      - sewer replacement
+      - drinking water
+      - MHIP
+      - Municipal Housing Infrastructure Program
+      - Health and Safety Water Stream
+      - HSWS
+    exclude: []
+
+  homelessness_supportive_housing:
+    include:
+      - supportive housing
+      - transitional housing
+      - encampment
+      - Built for Zero
+      - by-name list
+      - shelter beds
+      - rapid rehousing
+      - Coldest Night of the Year
+    exclude: []
+
+  health_system_local_impact:
+    include:
+      - urgent care centre
+      - hospital site
+      - Ontario Health Team
+      - OHT
+      - bed expansion
+      - net new beds
+      - emergency room
+    exclude: []
+
+  rural_affairs_economic_dev:
+    include:
+      - Bruce Power
+      - medical isotopes
+      - FedNor
+      - Northern Policy Institute
+      - RNIP
+      - Rural and Northern Immigration Pilot
+      - Indigenous partnership
+      - loan guarantee
+    exclude: []
+
+  major_corridors_transport:
+    include:
+      - Alto
+      - high-speed rail
+      - HFR
+      - right-of-way
+      - farm crossings
+      - agricultural impact assessment
+    exclude: []
