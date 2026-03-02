@@ -74,3 +74,111 @@ def article_to_record(outlet: dict, entry) -> dict:
         "link": link,
         "summary": summary,
         "published": dt.isoformat(),
+        "tags": outlet.get("tags", []),
+    }
+
+
+def in_time_window(rec: dict, start_dt) -> bool:
+    """
+    Keep items published after start_dt (last N hours window).
+    """
+    try:
+        pub = datetime.fromisoformat(rec["published"])
+    except Exception:
+        return False
+    return pub >= start_dt
+
+
+def matches_keywords(rec: dict, kw: dict):
+    """
+    Simple keyword inclusion/exclusion on lowercase normalized text.
+    Returns (bool, categories_list).
+    """
+    text = f"{rec['title']} {rec['summary']}"
+    text_norm = normalize_text(text)
+
+    def includes_any(words):
+        return any(w.lower() in text_norm for w in words)
+
+    def excludes_any(words):
+        return any(w.lower() in text_norm for w in words)
+
+    cats = []
+    housing_cfg = kw["categories"]["housing"]
+    municipal_cfg = kw["categories"]["municipal"]
+
+    if includes_any(housing_cfg["include"]) and not excludes_any(
+        housing_cfg.get("exclude", [])
+    ):
+        cats.append("Housing")
+
+    if includes_any(municipal_cfg["include"]) and not excludes_any(
+        municipal_cfg.get("exclude", [])
+    ):
+        cats.append("Municipal Affairs")
+
+    if not cats:
+        return False, []
+
+    # Deduplicate categories if both matched from overlapping terms
+    return True, list(set(cats))
+
+
+def deduplicate(records: list) -> list:
+    """
+    Remove near-duplicate headlines across outlets.
+    """
+    deduped = []
+    for r in records:
+        if not any(near_duplicate(r["title"], e["title"]) for e in deduped):
+            deduped.append(r)
+    return deduped
+
+
+# -------- Main --------
+def main():
+    start_dt = window_start(16)  # last 16 hours by default
+    sources = load_yaml(CONFIG_SOURCES)["outlets"]
+    keywords = load_yaml(CONFIG_KEYWORDS)
+
+    collected = []
+
+    for outlet in sources:
+        try:
+            # Fetch with explicit timeout and UA, then parse
+            print(f"[INFO] Fetching {outlet['name']} | {outlet['rss']}", flush=True)
+            resp = requests.get(outlet["rss"], timeout=HTTP_TIMEOUT, headers=UA)
+            resp.raise_for_status()
+
+            feed = feedparser.parse(resp.content)
+            for entry in feed.entries:
+                rec = article_to_record(outlet, entry)
+                if not in_time_window(rec, start_dt):
+                    continue
+
+                ok, cats = matches_keywords(rec, keywords)
+                if not ok:
+                    continue
+
+                rec["categories"] = cats
+                rec["sentiment"] = label_sentiment(f"{rec['title']}. {rec['summary']}")
+                collected.append(rec)
+
+        except requests.RequestException as e:
+            print(f"[WARN] Failed {outlet['name']}: {e}", flush=True)
+        except Exception as e:
+            print(f"[WARN] Unexpected error from {outlet['name']}: {e}", flush=True)
+
+    collected = deduplicate(collected)
+
+    # Save for build step
+    date_str = now_toronto().strftime("%Y-%m-%d")
+    out_path = DATA_DIR / f"news_{date_str}.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(collected, f, ensure_ascii=False, indent=2)
+
+    print(f"[INFO] Saved {len(collected)} news items -> {out_path}", flush=True)
+
+
+if __name__ == "__main__":
+    main()
